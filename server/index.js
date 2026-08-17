@@ -170,9 +170,9 @@ function enterLaunched() {
   state.energy = 100;
   state.litNodes = NODE_COUNT;
   state.countdown = null;
-  state.status = "正式成立";
-  state.message = "智慧视听操作系统产业联盟正式成立";
-  addLog("联盟正式成立，智慧视听新生态启动");
+  state.status = "正式启动";
+  state.message = "智慧视听操作系统专业委员会正式启动";
+  addLog("专业委员会正式启动，智慧视听新生态启动");
   syncDerivedState(100);
   state.phase = "launched";
   emitState("launch:complete", { flashId: Date.now() });
@@ -187,8 +187,8 @@ function startCountdown() {
   state.litNodes = NODE_COUNT;
   state.countdown = 5;
   state.status = "启动倒计时";
-  state.message = "联盟启动准备就绪";
-  addLog("联盟启动准备就绪，启动倒计时");
+  state.message = "专业委员会启动准备就绪";
+  addLog("专业委员会启动准备就绪，启动倒计时");
   emitState("countdown:start", { flashId: Date.now() });
 
   countdownTimer = setInterval(() => {

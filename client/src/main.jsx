@@ -355,7 +355,7 @@ function ScreenPage() {
       <header className="screen-header">
         <div />
         <div className="title-block">
-          <h1>智慧视听操作系统产业联盟成立大会</h1>
+          <h1>智慧视听操作系统专业委员会</h1>
           <p>汇聚产业能量　共启视听新生态</p>
         </div>
         <div className="scan-hint">
@@ -550,8 +550,8 @@ function MobilePage() {
         <span className={`mobile-status ${connected ? "online" : ""}`}>
           {connected ? "已连接现场大屏" : "连接中"}
         </span>
-        <h1><span>智慧视听操作系统</span><span>产业联盟成立大会</span></h1>
-        <p>{state.phase === "launched" ? "联盟已正式成立" : "点击按钮，将您的产业能量注入中央核心"}</p>
+        <h1><span>智慧视听操作系统</span><span>专业委员会</span></h1>
+        <p>{state.phase === "launched" ? "专业委员会已正式启动" : "点击按钮，将您的产业能量注入中央核心"}</p>
         <label className="unit-field">
           <span>姓名或单位名称</span>
           <input
@@ -763,7 +763,7 @@ function phaseText(phase) {
     charging: "扫码注入",
     boost: "强化加载",
     countdown: "倒计时",
-    launched: "已成立"
+    launched: "已启动"
   };
   return map[phase] || phase;
 }
