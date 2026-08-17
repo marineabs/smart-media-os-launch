@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>启动配置器</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: #eaf7ff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        background: #071427;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+        letter-spacing: 0;
+      }
+
+      p {
+        margin: 0;
+        color: #9fc2d8;
+        line-height: 1.6;
+      }
+
+      .status {
+        min-width: 120px;
+        padding: 9px 12px;
+        text-align: center;
+        color: #ffd66e;
+        border: 1px solid rgba(255, 214, 110, 0.44);
+        background: rgba(255, 214, 110, 0.08);
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
+        gap: 18px;
+      }
+
+      section {
+        padding: 20px;
+        border: 1px solid rgba(106, 210, 255, 0.24);
+        background: rgba(5, 19, 44, 0.82);
+      }
+
+      h2 {
+        margin: 0 0 16px;
+        font-size: 20px;
+      }
+
+      label {
+        display: grid;
+        gap: 7px;
+        margin-bottom: 14px;
+        color: #cbeeff;
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      input,
+      select {
+        width: 100%;
+        min-height: 42px;
+        padding: 0 11px;
+        color: #fff;
+        border: 1px solid rgba(108, 213, 255, 0.38);
+        background: rgba(1, 9, 28, 0.82);
+        outline: none;
+        font: inherit;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: rgba(255, 214, 110, 0.76);
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .checks {
+        display: grid;
+        gap: 8px;
+        margin: 4px 0 18px;
+      }
+
+      .check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        font-weight: 700;
+      }
+
+      .check input {
+        width: 18px;
+        min-height: 18px;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      button,
+      a.button {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 16px;
+        color: #061429;
+        font-weight: 900;
+        text-decoration: none;
+        border: 0;
+        background: #77e9ff;
+        cursor: pointer;
+      }
+
+      button.secondary {
+        color: #eaf7ff;
+        border: 1px solid rgba(106, 210, 255, 0.34);
+        background: rgba(10, 39, 78, 0.82);
+      }
+
+      button.danger {
+        background: #ff8585;
+      }
+
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.58;
+      }
+
+      .links {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .links a {
+        color: #80eaff;
+        overflow-wrap: anywhere;
+      }
+
+      pre {
+        height: 560px;
+        margin: 0;
+        padding: 14px;
+        overflow: auto;
+        color: #dff8ff;
+        border: 1px solid rgba(108, 213, 255, 0.22);
+        background: #020916;
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
+
+      @media (max-width: 860px) {
+        header,
+        .layout,
+        .row {
+          grid-template-columns: 1fr;
+          display: grid;
+        }
+
+        header {
+          align-items: stretch;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <h1>智慧视听互动系统启动配置器</h1>
+          <p>选择项目目录、访问 IP 和启动模式，然后启动现场服务。</p>
+        </div>
+        <div class="status" id="status">读取中</div>
+      </header>
+
+      <div class="layout">
+        <section>
+          <h2>启动配置</h2>
+          <label>
+            项目目录
+            <input id="projectDir" type="text" />
+          </label>
+
+          <div class="row">
+            <label>
+              局域网 IP
+              <select id="ip"></select>
+            </label>
+            <label>
+              启动模式
+              <select id="mode">
+                <option value="prod">正式部署：3001</option>
+                <option value="dev">开发调试：5173</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            正式服务端口
+            <input id="port" type="number" min="1" max="65535" value="3001" />
+          </label>
+
+          <div class="checks">
+            <label class="check">
+              <input id="install" type="checkbox" />
+              启动前执行 npm install
+            </label>
+            <label class="check">
+              <input id="build" type="checkbox" checked />
+              正式部署启动前构建前端
+            </label>
+          </div>
+
+          <div class="actions">
+            <button id="start">启动服务</button>
+            <button class="danger" id="stop">停止服务</button>
+            <button class="secondary" id="refresh">刷新状态</button>
+          </div>
+
+          <div class="links" id="links"></div>
+        </section>
+
+        <section>
+          <h2>运行日志</h2>
+          <pre id="logs"></pre>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+      let latest = null;
+
+      function getConfig() {
+        return {
+          projectDir: $("projectDir").value.trim(),
+          ip: $("ip").value,
+          mode: $("mode").value,
+          port: Number($("port").value || 3001),
+          install: $("install").checked,
+          build: $("build").checked
+        };
+      }
+
+      function appBaseUrl(config) {
+        const port = config.mode === "dev" ? 5173 : config.port;
+        return `http://${config.ip}:${port}`;
+      }
+
+      function renderLinks(config) {
+        if (!config || !config.ip) {
+          $("links").innerHTML = "";
+          return;
+        }
+        const base = appBaseUrl(config);
+        $("links").innerHTML = `
+          <a href="${base}/screen" target="_blank">大屏端：${base}/screen</a>
+          <a href="${base}/mobile" target="_blank">手机端：${base}/mobile</a>
+          <a href="${base}/admin" target="_blank">后台控制端：${base}/admin</a>
+        `;
+      }
+
+      async function refresh() {
+        const res = await fetch("/api/status");
+        latest = await res.json();
+        $("status").textContent = latest.running ? "运行中" : latest.taskRunning ? "启动中" : latest.status;
+        $("start").disabled = latest.running || latest.taskRunning;
+        $("stop").disabled = !latest.running;
+
+        if (!$("projectDir").value) $("projectDir").value = latest.projectRoot;
+        const selectedIp = $("ip").value;
+        $("ip").innerHTML = (latest.ips.length ? latest.ips : ["127.0.0.1"])
+          .map((ip) => `<option value="${ip}">${ip}</option>`)
+          .join("");
+        if (selectedIp) $("ip").value = selectedIp;
+
+        const config = latest.lastConfig || getConfig();
+        renderLinks({ ...getConfig(), ...config, port: Number($("port").value || 3001) });
+        $("logs").textContent = latest.logs.join("\n");
+        $("logs").scrollTop = $("logs").scrollHeight;
+      }
+
+      $("start").addEventListener("click", async () => {
+        await fetch("/api/start", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(getConfig())
+        });
+        await refresh();
+      });
+
+      $("stop").addEventListener("click", async () => {
+        await fetch("/api/stop", { method: "POST" });
+        await refresh();
+      });
+
+      $("refresh").addEventListener("click", refresh);
+      $("mode").addEventListener("change", () => {
+        $("build").disabled = $("mode").value === "dev";
+        renderLinks(getConfig());
+      });
+      $("ip").addEventListener("change", () => renderLinks(getConfig()));
+      $("port").addEventListener("input", () => renderLinks(getConfig()));
+
+      refresh();
+      setInterval(refresh, 1500);
+    </script>
+  </body>
+</html>
